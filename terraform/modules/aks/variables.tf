@@ -27,3 +27,13 @@ variable "vnet" {
    type = string
    description = "Vnet as defined in rg_nv main.tf"
 }
+
+variable "law" {
+   type = string
+   description = "law as defined in rg_nv main.tf"
+}
+
+variable "aks_admin_group" {
+   type = string
+   description = "AKS admin group object id"
+}
