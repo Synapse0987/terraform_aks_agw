@@ -11,4 +11,6 @@ module "az_aks" {
    aks_subnet = module.az_rg_vn.aks_subnet.id
    agw_subnet = module.az_rg_vn.agw_subnet.id
    vnet = module.az_rg_vn.vnet.id
+   law = module.az_rg_vn.law
+   aks_admin_group = var.aks_admin_group
 }
