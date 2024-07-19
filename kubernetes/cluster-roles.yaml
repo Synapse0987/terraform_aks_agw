@@ -17,6 +17,4 @@ roleRef:
   name: list-namespace
 subjects:
 - kind: Group
-  name: fe7ef0f0-5ce0-4314-8e2e-eb07a55cab02
-- kind: Group
-  name: ed4ad33b-708a-4181-ad32-ca7f4caf6651
+  name: e26331c3-d3f6-41cc-b618-91b0c2000825
