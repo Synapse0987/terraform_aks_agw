@@ -19,6 +19,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
    ingress_application_gateway {
      subnet_id = var.agw_subnet
  }
+   local_account_disabled = true
    azure_active_directory_role_based_access_control {
      managed = true
      azure_rbac_enabled = false
