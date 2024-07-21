@@ -32,12 +32,12 @@ To check for the environment variables, the following command can be ran.
 This portion will go into details the different parts of the terraform deployment. They can be found in `terraform_aks_agw/terraform`
 <br/>
 
-### Terraform providers
+### <u>Terraform providers</u>
 Terraform providers act as the bridge between Terraform and the APIs of the services it manages.
 AzureRM is used for this project and configurations can be found from the providers.tf file in the terraform root folder. Terraform will look for the environment variables as exported in the pre-requisites and initialize. 
 <br/>This is more secure as the service principal credentials and storage account key will only exist within the machine running this terraform configuration and not be exposed to the internet. 
 
-### Terraform main 
+### <u>Terraform main</u> 
 Terraform main acts as the core configuration file where the main infrastructure resources are defined and contains the essential resources and settings needed to create and manage infrastructure.
 <br/> In this repository, the `main.tf` file contains 2 modules, `az_rg_vn` and `az_aks`. Details for each module can be found below.
 - `az_rg_vn` : Creates all the resources (such as resource group, virtual network, subnets, log analytics workspace) required for the deployment of the AKS and AGW
@@ -47,12 +47,12 @@ Terraform main acts as the core configuration file where the main infrastructure
 <br/> Configuration for each individual module can be found under the `modules` directory. 
 <br/> 
 
-### Terraform variables 
+### <u>Terraform variables</u> 
 
 Terraform variables enables the terraform main configuration to accept different inputs, making it more dynamic and reusable. For the `variables.tf` file in the terraform root directory, it contains variables used globally by both modules like the location and admin group. For specific variable used by each module, they can be found under each individual module files under the `modules` directory. 
 <br/>A `*.tfvars` can be created to give custom values to the variables. This provides reusability of the modules configuring the `*.tfvars`.
 
-### User guide
+### <u>User guide</u>
 
 1. Change directory into the terraform root directory and run the command
 <br/>`terraform init`
