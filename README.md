@@ -6,13 +6,15 @@ This project is to use terraform to deploy an Azure Kubernetes Service, applicat
 ## This guide runs on the following assumptions.
 1. You are using Ubuntu OS. I am running Ubuntu 22.04.4 LTS
 2. Azure cli is installed and used to get or add Azure related resources
-3. Azure account used to log into the cli have permissions to create a service principal and assign roles
-4. An Azure storage account is required to store state file for high availability
+3. Kubectl is installed. If not installed, kubectl can be installed using Azure cli using the following command
+<br/>`az aks install-cli` 
+4. Azure account used to log into the cli have permissions to create a service principal and assign roles
+5. An Azure storage account is required to store state file for high availability
 
 ## Pre-requisites 
   1. This repository is cloned into your machine
-  2. A service principal has been created to authenticate against Azure
-     If not created, run the following command to create one using Azure cli (make sure you are logged into Azure)
+  2. A service principal has been created with the contributor and role base access control administrator roles to the subscription
+     If not created, run the following command to create one using Azure cli (make sure you are logged into Azure) 
      <br/>`az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>`
   3. Credentials related to the service principal is exported as an environment variable. They can be added into the `~/.bashrc` file as a permenant environment variable 
       <br/>**DO NOT CHANGE THE FOLLOWING VARIABLE NAMES**
@@ -52,7 +54,7 @@ Terraform main acts as the core configuration file where the main infrastructure
 Terraform variables enables the terraform main configuration to accept different inputs, making it more dynamic and reusable. For the `variables.tf` file in the terraform root directory, it contains variables used globally by both modules like the location and admin group. For specific variable used by each module, they can be found under each individual module files under the `modules` directory. 
 <br/>A `*.tfvars` can be created to give custom values to the variables. This provides reusability of the modules configuring the `*.tfvars`.
 
-### <u>User guide</u>
+### <u>Terraform user guide</u>
 
 1. Change directory into the terraform root directory and run the command
 <br/>`terraform init`
@@ -67,4 +69,28 @@ Terraform variables enables the terraform main configuration to accept different
 
 4. Once the previous command shows no error, use the following command to deploy the resources
 <br/>`terraform apply -var-file=<your-tfvars-file-name>`
-<br/> Some common errors may include the lack of a certain resource for the AKS node. This can be resolved by changing the instance name in the `modules/aks/main.tf` under the `default_node_pool` variable to another instance name.
+<br/> **Some common errors may include the lack of a certain resource for the AKS node. This can be resolved by changing the instance name in the `modules/aks/main.tf` under the `default_node_pool` variable to another instance name.
+
+## Kubernetes guide
+
+This portion will go into details the different parts of the kubernetes deployment. They can be found in `terraform_aks_agw/kubernetes`.
+
+### assignment-deployment.yaml file
+This yaml file deploys a namespace called *tf-assignment*, a deployment with 1 nginx replica, a service to open port 80 of nginx and an ingress to configure Azure application gateway all under the same namespace.
+
+### cluster-roles.yaml
+This yaml deploys a cluster role to list and get namespaces. A user without this RBAC will be forbidden from getting and listing namespaces. 
+<br/>A cluster role binding deployment to bind the cluster role for a group or user created in Entra ID. Change the kind field to group or user and use the respective object id for the name field as needed to bind the role to the user.
+
+### namespace-admin-role.yaml
+This yaml deploys a role to give all permissions for the *tf-assignment* namespace.
+<br/>A role binding deployment to bind the role to a group or user created in Entra ID. Change the kind field to group or user and use the respective object id for the name field as needed to bind the role to the user.
+
+### Kubernetes user guide
+1. After AKS is deployed, it can be accessed using the following command while logged in using an account from Entra ID
+<br/>`az aks get-credentials --resource-group <resource-group-name> --name <aks-cluster-name>`
+<br/>**If unable to run any kubectl commands due to permission errors, add the user into the admin group configured in the terraform configuration for it to have admin permissions in the cluster
+
+2. Files can be deployed using the following command in the kubernetes root folder
+<br/>`kubectl apply -f <kubernetes-file-name.yaml>`
+<br/>**Run the assignment-deployment.yaml file to create the namespace first
