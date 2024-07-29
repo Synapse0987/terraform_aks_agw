@@ -54,7 +54,7 @@ Terraform main acts as the core configuration file where the main infrastructure
 ### <u>Terraform variables</u> 
 
 Terraform variables enables the terraform main configuration to accept different inputs, making it more dynamic and reusable. For the `variables.tf` file in the terraform root directory, it contains variables used globally by both modules like the location and admin group. For specific variable used by each module, they can be found under each individual module files under the `modules` directory. 
-<br/>A `*.tfvars` can be created to give custom values to the variables. This provides reusability of the modules configuring the `*.tfvars`.
+<br/>A `tfvars` file can be created to give custom values to the variables. This provides reusability of the modules by configuring the `tfvars` file.
 
 ### <u>Terraform user guide</u>
 
@@ -62,7 +62,7 @@ Terraform variables enables the terraform main configuration to accept different
 <br/>`terraform init`
 <br/>Terraform will initialize the providers automatically. Upon initialization, a `.terraform` directory with the providers defined will be created in the terraform root directory.
 
-2. Create a `*.tfvars` file for the following
+2. Create a `<name-of-your-tfvars-file>.tfvars` file for the following
 - `location` : for the region used for the deployment
 - `aks_admin_group` : Object Id of the group created for aks admin role in Entra ID
 
