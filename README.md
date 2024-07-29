@@ -15,9 +15,9 @@ This project is to use terraform to deploy an Azure Kubernetes Service, applicat
   1. This repository is cloned into your machine
   2. A service principal has been created with the contributor and role base access control administrator roles to the subscription
      If not created, run the following command to create one using Azure cli (make sure you are logged into Azure) 
-     <br/>`az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>`
-     <br/>`spID=$(az ad sp list --display-name laptop-test-terraform --query "[].{spID:appId}" --output tsv)`
-     <br/>`az role assignment create --assignee $spID --role "Role Based Access Control Administrator" --scope "/subscriptions/<subscription_id>"`
+     <br/>- `az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>`
+     <br/>- `spID=$(az ad sp list --display-name laptop-test-terraform --query "[].{spID:appId}" --output tsv)`
+     <br/>- `az role assignment create --assignee $spID --role "Role Based Access Control Administrator" --scope "/subscriptions/<subscription_id>"`
   3. Credentials related to the service principal is exported as an environment variable. They can be added into the `~/.bashrc` file as a permenant environment variable 
       <br/>**DO NOT CHANGE THE FOLLOWING VARIABLE NAMES**
       <br/>`export ARM_SUBSCRIPTION_ID="<azure_subscription_id>"`
